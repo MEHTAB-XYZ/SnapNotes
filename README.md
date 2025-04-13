@@ -6,7 +6,7 @@ A web application that helps students generate clean, readable notes from screen
 
 - Upload screenshots (PNG, JPG, JPEG)
 - Extract text using OCR
-- Generate detailed, formatted notes using Google's Gemini Pro AI
+- Generate detailed, formatted notes using Google's Gemini AI
 - Export notes to PDF
 
 ## Project Structure
