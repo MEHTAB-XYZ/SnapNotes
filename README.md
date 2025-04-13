@@ -36,22 +36,17 @@ A web application that helps students generate clean, readable notes from screen
 2. Install the required Python packages:
 
    ```
-   pip install -r requirements.txt
-   ```
+   pip install -r requirements.txt   ```
 
-3. Install Tesseract OCR:
 
-   - Windows: Download and install from https://github.com/UB-Mannheim/tesseract/wiki
-   - macOS: `brew install tesseract`
-   - Linux: `sudo apt install tesseract-ocr`
 
-4. Create a `.env` file in the backend directory and add your Gemini API key:
+3. Create a `.env` file in the backend directory and add your Gemini API key:
 
    ```
    GEMINI_API_KEY=your_api_key_here
    ```
 
-5. Start the backend server:
+4. Start the backend server:
    ```
    uvicorn main:app --reload
    ```
