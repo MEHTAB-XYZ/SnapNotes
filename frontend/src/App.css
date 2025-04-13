@@ -59,3 +59,14 @@ button {
 button:active {
   transform: scale(0.98);
 }
+
+/* Smooth scrolling for the entire app */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Smooth scrolling for containers */
+.overflow-y-auto {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}

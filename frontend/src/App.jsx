@@ -497,145 +497,114 @@ function App() {
           </h1>
         </div>
         
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col space-y-6">
-          {/* Main content area with illustration and upload */}
-          <div className="flex-1 flex flex-col space-y-4 min-h-0">
-            {/* Illustration */}
-            <div className="h-48 bg-white rounded-xl p-4 flex items-center justify-center shadow-sm">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0 overflow-auto">
+          {/* Main content area with fixed heights and scrolling */}
+          <div className="flex-1 flex flex-col space-y-4">
+            {/* Illustration with fixed height */}
+            <div className="h-56 flex-none bg-white rounded-xl p-4 flex items-center justify-center shadow-sm">
               <img
                 src={notesIllustration}
                 alt="Notes illustration"
-                className="h-full w-auto object-contain"
+                className="h-48 w-auto object-contain"
               />
             </div>
 
-            {/* Upload Area */}
-            <div 
-              className="flex-1 border-2 border-dashed border-gray-300 rounded-xl bg-white transition-all duration-300 hover:border-indigo-300 flex flex-col relative overflow-hidden"
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                e.preventDefault();
-                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                  handleFileChange({ target: { files: e.dataTransfer.files } });
-                }
-              }}
-            >
-              {previewUrls.length === 0 ? (
-                <div className="flex-1 flex flex-col items-center justify-center space-y-4 p-6">
-                  <svg
-                    className="h-16 w-16 text-gray-400"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 48 48"
-                    aria-hidden="true"
+            {/* Upload area with scrollable image preview */}
+            <div className="flex-1 flex flex-col space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-xl bg-white p-4 transition-all duration-300 hover:border-indigo-300">
+                <div className="flex flex-col items-center space-y-4">
+                  <label
+                    htmlFor="file-upload"
+                    className="cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 px-4 py-2 border border-gray-300 hover:border-indigo-300 hover:shadow-sm transition-all duration-300"
                   >
-                    <path
-                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                    <span>Upload files</span>
+                    <input
+                      id="file-upload"
+                      name="file-upload"
+                      type="file"
+                      className="sr-only"
+                      accept="image/jpeg,image/jpg,image/png"
+                      onChange={handleFileChange}
+                      multiple
                     />
-                  </svg>
-                  <div className="flex items-center space-x-4">
-                    <label
-                      htmlFor="file-upload"
-                      className="cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 px-4 py-2 border border-gray-300 hover:border-indigo-300 hover:shadow-sm transition-all duration-300"
-                    >
-                      <span>Upload files</span>
-                      <input
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        className="sr-only"
-                        accept="image/jpeg,image/jpg,image/png"
-                        onChange={handleFileChange}
-                        multiple
-                      />
-                    </label>
-                    <p className="text-gray-600">or drag and drop</p>
-                  </div>
+                  </label>
                   <p className="text-sm text-gray-500">JPG, JPEG, PNG up to 5MB each</p>
                   <p className="text-sm text-blue-500">You can also paste images with Ctrl+V</p>
                 </div>
-              ) : (
-                <div className="h-full flex flex-col">
-                  <div className="p-4 border-b border-gray-200">
-                    <h4 className="text-sm font-medium text-gray-700">Selected Images</h4>
-                  </div>
-                  <div className="flex-1 overflow-y-auto p-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      {previewUrls.map((url, index) => (
-                        <div key={index} className="relative group">
-                          <div className="aspect-[3/2] rounded-lg overflow-hidden border border-gray-200">
-                            <img 
-                              src={url} 
-                              alt={`Preview ${index}`} 
-                              className="w-full h-full object-cover" 
-                            />
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => removeFile(index)}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-              {fileError && (
-                <div className="absolute bottom-0 left-0 right-0 bg-red-50 px-4 py-2 border-t border-red-100">
-                  <p className="text-sm text-red-600">{fileError}</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Topic input and submit */}
-          <div className="flex-none space-y-4">
-            <div>
-              <label htmlFor="topic" className="block text-sm font-medium text-gray-700 mb-1">
-                Subject/Topic
-              </label>
-              <input
-                type="text"
-                name="topic"
-                id="topic"
-                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full text-sm border-gray-300 rounded-lg p-3 border transition-all duration-300 hover:shadow-md"
-                placeholder="e.g. Thermodynamics, WW2 History"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-              />
-            </div>
-            
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={loading}
-                className="inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Processing...
-                  </>
-                ) : 'Generate Notes'}
-              </button>
-            </div>
-            
-            {error && (
-              <div className="text-sm text-red-600 text-center bg-red-50 rounded-lg p-2">
-                {error}
               </div>
-            )}
+
+              {/* Scrollable image preview area */}
+              <div className="flex-1 overflow-y-auto p-4 border border-gray-200 rounded-xl bg-gray-50">
+                {previewUrls.length > 0 ? (
+                  <div className="grid grid-cols-3 gap-4">
+                    {previewUrls.map((url, index) => (
+                      <div key={index} className="relative group">
+                        <div className="aspect-[4/3] rounded-lg overflow-hidden border border-gray-200">
+                          <img 
+                            src={url} 
+                            alt={`Preview ${index}`} 
+                            className="w-full h-full object-cover" 
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeFile(index)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-600"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 text-center">No images uploaded yet.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Topic input and submit */}
+            <div className="flex-none space-y-4">
+              <div>
+                <label htmlFor="topic" className="block text-sm font-medium text-gray-700 mb-1">
+                  Subject/Topic
+                </label>
+                <input
+                  type="text"
+                  name="topic"
+                  id="topic"
+                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full text-sm border-gray-300 rounded-lg p-3 border transition-all duration-300 hover:shadow-md"
+                  placeholder="e.g. Thermodynamics, WW2 History"
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                />
+              </div>
+              
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Processing...
+                    </>
+                  ) : 'Generate Notes'}
+                </button>
+              </div>
+              
+              {error && (
+                <div className="text-sm text-red-600 text-center bg-red-50 rounded-lg p-2">
+                  {error}
+                </div>
+              )}
+            </div>
           </div>
         </form>
       </div>
@@ -652,8 +621,7 @@ function App() {
                   className="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
                 >
                   <svg className="-ml-0.5 mr-1.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 0115 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
                   Preview PDF
                 </button>
