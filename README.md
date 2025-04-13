@@ -89,4 +89,4 @@ A web application that helps students generate clean, readable notes from screen
 ## Technologies Used
 
 - Frontend: React, Tailwind CSS, react-to-pdf
-- Backend: FastAPI, pytesseract, Google Generative AI (Gemini Pro)
+- Backend: FastAPI, pytesseract, Google Generative AI (Gemini Flash)
