@@ -5,6 +5,8 @@ import notesIllustration from './assets/notes-illustration.png'
 import './App.css'
 import './notes.css'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 function App() {
   const [files, setFiles] = useState([])
   const [topic, setTopic] = useState('')
@@ -116,7 +118,6 @@ function App() {
     setError('')
     setNotes('')
     
-    // Process each file and combine the results
     try {
       let combinedNotes = '';
       
@@ -125,17 +126,16 @@ function App() {
         formData.append('file', files[i])
         formData.append('topic', topic)
         
-        const response = await axios.post('http://localhost:8000/generate-notes', formData, {
+        const response = await axios.post(`${API_URL}/generate-notes`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
         
-        // Clean up code block markers and combine notes from multiple images
         const cleanedNotes = response.data.notes
-          .replace(/```[a-z]*\n/g, '') // Remove opening code block markers with language
-          .replace(/```\n/g, '') // Remove opening code block markers without language
-          .replace(/```/g, '') // Remove closing code block markers
+          .replace(/```[a-z]*\n/g, '')
+          .replace(/```\n/g, '')
+          .replace(/```/g, '')
           .trim()
         
         combinedNotes += cleanedNotes + '\n';

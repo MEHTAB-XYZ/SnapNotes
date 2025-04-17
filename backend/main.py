@@ -15,17 +15,24 @@ load_dotenv()
 # Configure Gemini API
 api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
-    raise ValueError("GEMINI_API_KEY environment variable not set")
+    raise ValueError("GEMINI_API_KEY environment variable is required")
+
+# Get allowed origins from environment variable or use default
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000").split(",")
 
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-2.0-flash")
 
-app = FastAPI(title="Smart Notes API")
+app = FastAPI(
+    title="Smart Notes API",
+    description="API for generating study notes from images using OCR and Gemini AI",
+    version="1.0.0"
+)
 
-# Configure CORS
+# Configure CORS with environment-based origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
