@@ -20,7 +20,6 @@ A web application that helps students generate clean, readable notes from screen
 
 - Node.js and npm
 - Python 3.8+
-- Tesseract OCR installed on your system
 - Google Gemini API key
 
 ## Setup Instructions
